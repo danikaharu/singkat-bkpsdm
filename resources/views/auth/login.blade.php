@@ -15,7 +15,10 @@
                         <img src="{{ asset('template/admin') }}/images/logo/logo1.svg" alt="Logo">
                     </a> --}}
                 </div>
-                <h1 class="auth-title">{{ __('Log in.') }}</h1>
+                <h1 class="auth-title">{{ __('SINGKAT') }}</h1>
+                <p class="auth-subtitle mb-5">
+                    Sistem Informasi Kenaikan Pangkat BKPSDM Bone Bolango
+                </p>
 
                 @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible show fade">
