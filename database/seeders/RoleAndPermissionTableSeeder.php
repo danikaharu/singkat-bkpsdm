@@ -19,6 +19,8 @@ class RoleAndPermissionTableSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $roleSuperAdmin = Role::create(['name' => 'Super Admin']);
+        $roleVerifikator = Role::create(['name' => 'Verifikator']);
+        $roleAdminOPD = Role::create(['name' => 'Admin OPD']);
 
         foreach (config('permission.list_permissions') as $permission) {
             foreach ($permission['lists'] as $list) {
