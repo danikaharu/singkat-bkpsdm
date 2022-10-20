@@ -61,9 +61,9 @@ class PromotionController extends Controller
 
         $promotions = $promotionQuery->with('employee')->latest();
 
-        if (auth()->user()->roles->first()->id == 7) {
+        if (auth()->user()->roles->first()->id == 1) {
             $promotions->get();
-        } else if (auth()->user()->roles->first()->id == 8) {
+        } else if (auth()->user()->roles->first()->id == 3) {
             $promotions->where('agency_id', $adminInfo->k_dinas);
         } else {
             $promotions->where('verificator_id', auth()->user()->id);
@@ -128,13 +128,13 @@ class PromotionController extends Controller
 
         $files = File::where('promotion_id', $promotion->id)->get();
 
-        if ($promotion->verificator_id != auth()->user()->id && auth()->user()->roles->first()->id == 9) {
+        if ($promotion->verificator_id != auth()->user()->id && auth()->user()->roles->first()->id == 2) {
             return redirect()
                 ->back()
                 ->with('toast_error', __('Maaf anda tidak dapat mengakses data asn tersebut.'));
         }
 
-        if ($adminInfo->k_dinas != $promotion->employee->k_dinas && auth()->user()->roles->first()->id == 8) {
+        if ($adminInfo->k_dinas != $promotion->employee->k_dinas && auth()->user()->roles->first()->id == 3) {
             return redirect()
                 ->back()
                 ->with('toast_error', __('Maaf anda tidak dapat mengakses data asn tersebut.'));
@@ -155,13 +155,13 @@ class PromotionController extends Controller
         $adminInfo = Employee::where('nip_baru', $usernameAdmin)->first();
         $employee = Employee::with('promotions.files', 'agency')->where('id_asn', $promotion->employee_id)->first();
 
-        if ($promotion->verificator_id != auth()->user()->id && auth()->user()->roles->first()->id == 9) {
+        if ($promotion->verificator_id != auth()->user()->id && auth()->user()->roles->first()->id == 2) {
             return redirect()
                 ->back()
                 ->with('toast_error', __('Maaf anda tidak dapat mengakses data asn tersebut.'));
         }
 
-        if ($adminInfo->k_dinas != $promotion->employee->k_dinas && auth()->user()->roles->first()->id == 8) {
+        if ($adminInfo->k_dinas != $promotion->employee->k_dinas && auth()->user()->roles->first()->id == 3) {
             return redirect()
                 ->back()
                 ->with('toast_error', __('Maaf anda tidak dapat mengakses data asn tersebut.'));
