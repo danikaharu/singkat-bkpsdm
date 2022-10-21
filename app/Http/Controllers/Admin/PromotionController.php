@@ -709,11 +709,19 @@ class PromotionController extends Controller
                 ->back()
                 ->with('toast_error', __('Maaf masa input berkas telah selesai.'));
         } else {
+            $message = [
+                'procedure_type.required' => 'Jenis Prosedur Wajib Diisi',
+                'procedure_type.in' => 'Jenis Prosedur Tidak Ada Dalam Daftar',
+                'promotion_type.required' => 'Jenis Kenaikan Pangkat Wajib Diisi',
+                'promotion_type.in' => 'Jenis Kenaikan Pangkat Tidak Ada Dalam Daftar',
+                'job_type.required' => 'Jenis Jabatan Wajib Diisi',
+                'job_type.in' => 'Jenis Jabatan Tidak Ada Dalam Daftar',
+            ];
             $validated = $request->validate([
                 'procedure_type' => 'required|in:1,2,3,4',
                 'promotion_type' => 'required|in:1,2,3,4',
                 'job_type' => 'required|in:1,2,3',
-            ]);
+            ], $message);
 
             if (empty($request->session()->get('promotion'))) {
                 $promotion = new \App\Models\Promotion();
