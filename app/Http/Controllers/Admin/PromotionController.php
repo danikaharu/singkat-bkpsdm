@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\{StorePromotionRequest, UpdatePromotionRequest};
+use App\Http\Requests\{StoreFileRequest, StorePromotionRequest, UpdateFileRequest, UpdatePromotionRequest};
 use App\Models\{CancelPromotion, Employee, File, Promotion};
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -177,37 +177,11 @@ class PromotionController extends Controller
      * @param  \App\Models\Promotion  $promotion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Promotion $promotion)
+    public function update(UpdateFileRequest $request, Promotion $promotion)
     {
         $path = storage_path('app/public/upload/berkas/');
 
-        $attr = request()->validate([
-            'sk_cpns' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_pns' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_pangkat_terakhir' => 'nullable', 'mimes:pdf', 'max:2048',
-            'kartu_pegawai' => 'nullable', 'mimes:pdf', 'max:2048',
-            'ijazah_lama' => 'nullable', 'mimes:pdf', 'max:2048',
-            'ijazah_baru' => 'nullable', 'mimes:pdf', 'max:2048',
-            'transkrip_lama' => 'nullable', 'mimes:pdf', 'max:2048',
-            'transkrip_baru' => 'nullable', 'mimes:pdf', 'max:2048',
-            'skp_lama' => 'nullable', 'mimes:pdf', 'max:2048',
-            'skp_baru' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sttpl' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_mutasi' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_pengalihan' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_fungsional' => 'nullable', 'mimes:pdf', 'max:2048',
-            'pak_asli' => 'nullable', 'mimes:pdf', 'max:2048',
-            'pak_lama' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_penyesuaian_fungsional' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_kenaikan_fungsional' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sertifikat_pim' => 'nullable', 'mimes:pdf', 'max:2048',
-            'surat_pelantikan' => 'nullable', 'mimes:pdf', 'max:2048',
-            'surat_lowong' => 'nullable', 'mimes:pdf', 'max:2048',
-            'surat_tugas' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_pelantikan' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_jabatan' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_belajar' => 'nullable', 'mimes:pdf', 'max:2048'
-        ]);
+        $attr = $request->validated();
 
         if (request()->file('sk_cpns') && request()->file('sk_cpns')->isValid()) {
 
@@ -741,8 +715,8 @@ class PromotionController extends Controller
     public function createStep2(Request $request)
     {
         $promotion = $request->session()->get('promotion');
-        $employee = Employee::where('nip_baru', request()->nip_baru)->first();
-        return view('admin.promotion.step2', compact('employee', 'promotion'));
+        $employee = Employee::where('nip_baru', $request->nip_baru)->first();
+        return view('admin.promotion.step2', compact('promotion', 'employee'));
     }
 
     public function storeStep2(Request $request)
@@ -804,48 +778,19 @@ class PromotionController extends Controller
     public function createStep3(Request $request)
     {
         $promotion = request()->session()->get('promotion');
-        $files = File::where('promotion_id', $promotion->id)->get();
 
-        $employee = Employee::with('promotions.files')->where('id_asn', $promotion->employee_id)->first();
+        $employee = Employee::with('agency')->where('id_asn', $promotion->employee_id)->first();
 
-        return view('admin.promotion.step3', compact('promotion', 'employee', 'files'));
+        return view('admin.promotion.step3', compact('promotion', 'employee'));
     }
 
-    public function storeStep3(Request $request)
+    public function storeStep3(StoreFileRequest $request)
     {
         $promotion = $request->session()->get('promotion');
 
-        $attr = request()->validate([
-            'sk_cpns' => 'required', 'mimes:pdf', 'max:2048',
-            'sk_pns' => 'required', 'mimes:pdf', 'max:2048',
-            'sk_pangkat_terakhir' => 'required', 'mimes:pdf', 'max:2048',
-            'kartu_pegawai' => 'required', 'mimes:pdf', 'max:2048',
-            'ijazah_lama' => 'nullable', 'mimes:pdf', 'max:2048',
-            'ijazah_baru' => 'required', 'mimes:pdf', 'max:2048',
-            'transkrip_lama' => 'nullable', 'mimes:pdf', 'max:2048',
-            'transkrip_baru' => 'required', 'mimes:pdf', 'max:2048',
-            'skp_lama' => 'required', 'mimes:pdf', 'max:2048',
-            'skp_baru' => 'required', 'mimes:pdf', 'max:2048',
-            'sttpl' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_mutasi' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_pengalihan' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_fungsional' => 'nullable', 'mimes:pdf', 'max:2048',
-            'pak_asli' => 'nullable', 'mimes:pdf', 'max:2048',
-            'pak_lama' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_penyesuaian_fungsional' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_kenaikan_fungsional' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sertifikat_pim' => 'nullable', 'mimes:pdf', 'max:2048',
-            'surat_pelantikan' => 'nullable', 'mimes:pdf', 'max:2048',
-            'surat_lowong' => 'nullable', 'mimes:pdf', 'max:2048',
-            'surat_tugas' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_pelantikan' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_jabatan' => 'nullable', 'mimes:pdf', 'max:2048',
-            'sk_belajar' => 'nullable', 'mimes:pdf', 'max:2048'
-        ]);
+        $attr = $request->validated();
 
-        if (request()->file('sk_cpns') && request()->file('sk_cpns')->isValid()) {
-
-
+        if ($request->file('sk_cpns') && $request->file('sk_cpns')->isValid()) {
             $filename = request()->file('sk_cpns')->hashName();
             request()->file('sk_cpns')->storeAs('upload/berkas', $filename, 'public');
 
@@ -1044,7 +989,20 @@ class PromotionController extends Controller
 
         File::create($attr);
 
-        return redirect()->back()->with('toast_success', 'Data berhasil ditambah');
+        $request->session()->put('promotion', $submit);
+
+        return redirect()->route('promotion.step4')->with('toast_success', 'Data berhasil ditambah');
+    }
+
+    public function step4()
+    {
+        $promotion = request()->session()->get('promotion');
+
+        $employee = Employee::with('agency')->where('id_asn', $promotion->employee_id)->first();
+
+        $files = File::where('promotion_id', $promotion->id)->get();
+
+        return view('admin.promotion.step4', compact('employee', 'files'));
     }
 
     public function storeVerificator(Request $request, Promotion $promotion)
