@@ -11,9 +11,7 @@
                 <i class="fa fa-pencil-alt"></i>
             </a>
         @endcan
-    @endif
 
-    @if ($model->status == 1 || $model->status == 4)
         @can('delete promotions')
             <form action="{{ route('promotion.destroy', $model->id) }}" method="post" class="d-inline" role="alert"
                 alert-title="Apakah anda yakin ingin menghapus data ini?" alert-text="Data yang dihapus tidak bisa kembali">
