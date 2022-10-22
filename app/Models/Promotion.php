@@ -16,6 +16,11 @@ class Promotion extends Model
         return $this->belongsTo(Employee::class, 'employee_id', 'id_asn');
     }
 
+    public function verificator()
+    {
+        return $this->belongsTo(User::class, 'verificator_id', 'id');
+    }
+
     public function cancel_promotion()
     {
         return $this->hasOne(CancelPromotion::class);
@@ -25,7 +30,6 @@ class Promotion extends Model
     {
         return $this->hasMany(File::class);
     }
-
 
     public function promotion_type()
     {
