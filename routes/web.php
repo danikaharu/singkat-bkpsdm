@@ -38,6 +38,7 @@ Route::middleware(['auth', 'web'])->prefix('admin')->group(function () {
     Route::post('/promotion/step2', [\App\Http\Controllers\Admin\PromotionController::class, 'storeStep2'])->name('promotion.storeStep2');
     Route::get('/promotion/step3', [\App\Http\Controllers\Admin\PromotionController::class, 'createStep3'])->name('promotion.step3');
     Route::post('/promotion/step3', [\App\Http\Controllers\Admin\PromotionController::class, 'storeStep3'])->name('promotion.storeStep3');
+    Route::get('/promotion/step4', [\App\Http\Controllers\Admin\PromotionController::class, 'step4'])->name('promotion.step4');
     Route::post('/promotion/verificator/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'storeVerificator'])->name('promotion.storeVerificator');
     Route::get('/promotion/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'show'])->name('promotion.show');
     Route::delete('/promotion/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'destroy'])->name('promotion.destroy');
