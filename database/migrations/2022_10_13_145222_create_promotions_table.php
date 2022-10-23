@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('promotions', function (Blueprint $table) {
             $table->id();
             $table->string('employee_id');
-            $table->string('verificator_id');
+            $table->string('verificator_id')->nullable();
             $table->tinyInteger('procedure_type');
             $table->tinyInteger('promotion_type');
             $table->tinyInteger('job_type');
