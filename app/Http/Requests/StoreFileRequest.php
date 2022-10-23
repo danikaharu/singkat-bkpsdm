@@ -49,6 +49,9 @@ class StoreFileRequest extends FormRequest
             'sk_pelantikan' => 'sometimes|required|mimes:pdf|max:2048',
             'sk_jabatan' => 'sometimes|required|mimes:pdf|max:2048',
             'sk_belajar' => 'sometimes|required|mimes:pdf|max:2048',
+            'sk_lulus_ujian' => 'sometimes|required|mimes:pdf|max:2048',
+            'uraian_tugas' => 'sometimes|required|mimes:pdf|max:2048',
+            'lainnya' => 'sometimes|nullable|mimes:pdf|max:2048',
         ];
     }
 
@@ -127,6 +130,14 @@ class StoreFileRequest extends FormRequest
             'sk_belajar.required' => 'SK Tugas/Ijin Belajar Wajib Diupload',
             'sk_belajar.mimes' => 'Upload file hanya bisa pdf',
             'sk_belajar.max' => 'Upload file maksimal 2 MB',
+            'sk_lulus_ujian.required' => 'SK Lulus Ujian Dinas Wajib Diupload',
+            'sk_lulus_ujian.mimes' => 'Upload file hanya bisa pdf',
+            'sk_lulus_ujian.max' => 'Upload file maksimal 2 MB',
+            'uraian_tugas.required' => 'SK Perincian Tugas Wajib Diupload',
+            'uraian_tugas.mimes' => 'Upload file hanya bisa pdf',
+            'uraian_tugas.max' => 'Upload file maksimal 2 MB',
+            'lainnya.mimes' => 'Upload file hanya bisa pdf',
+            'lainnya.max' => 'Upload file maksimal 2 MB',
         ];
     }
 }

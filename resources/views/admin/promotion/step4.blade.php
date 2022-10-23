@@ -547,6 +547,66 @@
                                                     </div>
                                                 </div>
                                             @endif
+                                            @if ($item->sk_lulus_ujian)
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#flush-collapse25"
+                                                            aria-expanded="false" aria-controls="flush-collapse25">
+                                                            SK Lulus Ujian Dinas
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapse25" class="accordion-collapse collapse"
+                                                        data-bs-parent="#accordionFlushDocument">
+                                                        <div class="accordion-body">
+                                                            <iframe
+                                                                src="{{ asset('ViewerJS/#../') }}/storage/upload/berkas/{{ $item->sk_belajar }} "
+                                                                frameborder="0" width='100%' height='300'
+                                                                allowfullscreen webkitallowfullscreen></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @if ($item->uraian_tugas)
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#flush-collapse25"
+                                                            aria-expanded="false" aria-controls="flush-collapse25">
+                                                            SK Perincian Tugas sesuai Tupoksi atau disiplin
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapse25" class="accordion-collapse collapse"
+                                                        data-bs-parent="#accordionFlushDocument">
+                                                        <div class="accordion-body">
+                                                            <iframe
+                                                                src="{{ asset('ViewerJS/#../') }}/storage/upload/berkas/{{ $item->sk_belajar }} "
+                                                                frameborder="0" width='100%' height='300'
+                                                                allowfullscreen webkitallowfullscreen></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @if ($item->lainnya)
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#flush-collapse25"
+                                                            aria-expanded="false" aria-controls="flush-collapse25">
+                                                            Dokumen Lainnya
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapse25" class="accordion-collapse collapse"
+                                                        data-bs-parent="#accordionFlushDocument">
+                                                        <div class="accordion-body">
+                                                            <iframe
+                                                                src="{{ asset('ViewerJS/#../') }}/storage/upload/berkas/{{ $item->sk_belajar }} "
+                                                                frameborder="0" width='100%' height='300'
+                                                                allowfullscreen webkitallowfullscreen></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         @endforeach
                                     </div>
                                 </div>

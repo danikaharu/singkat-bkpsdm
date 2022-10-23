@@ -429,7 +429,49 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="sk_lulus_ujian">{{ __('SK Lulus Ujian Dinas') }}
+                                                                    <span class="text-danger"> &#42;</span></label>
+                                                                <input type="file" name="sk_lulus_ujian"
+                                                                    id="sk_lulus_ujian"
+                                                                    class="form-control @error('sk_lulus_ujian') is-invalid @enderror">
+                                                                @error('sk_lulus_ujian')
+                                                                    <div class="invalid-feedback">
+                                                                        {{ $message }}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label for="uraian_tugas">{{ __('SK Perincian Tugas') }}
+                                                                    <span class="text-danger"> &#42;</span></label>
+                                                                <input type="file" name="uraian_tugas"
+                                                                    id="uraian_tugas"
+                                                                    class="form-control @error('uraian_tugas') is-invalid @enderror">
+                                                                @error('uraian_tugas')
+                                                                    <div class="invalid-feedback">
+                                                                        {{ $message }}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
                                                     @endif
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="lainnya">{{ __('Dokumen Lainnya') }}
+                                                            </label>
+                                                            <input type="file" name="lainnya" id="lainnya"
+                                                                class="form-control @error('lainnya') is-invalid @enderror">
+                                                            @error('lainnya')
+                                                                <div class="invalid-feedback">
+                                                                    {{ $message }}
+                                                                </div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                             </div>

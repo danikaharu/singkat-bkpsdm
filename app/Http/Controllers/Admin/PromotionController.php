@@ -512,6 +512,45 @@ class PromotionController extends Controller
 
             $attr['sk_belajar'] = $filename;
         }
+        if (request()->file('sk_lulus_ujian') && request()->file('sk_lulus_ujian')->isValid()) {
+            foreach ($promotion->files as $file) {
+                if ($file->sk_lulus_ujian != null && file_exists($path . $file->sk_lulus_ujian)) {
+                    unlink($path . $file->sk_lulus_ujian);
+                    $file->delete();
+                }
+            }
+
+            $filename = request()->file('sk_lulus_ujian')->hashName();
+            request()->file('sk_lulus_ujian')->storeAs('upload/berkas', $filename, 'public');
+
+            $attr['sk_lulus_ujian'] = $filename;
+        }
+        if (request()->file('uraian_tugas') && request()->file('uraian_tugas')->isValid()) {
+            foreach ($promotion->files as $file) {
+                if ($file->uraian_tugas != null && file_exists($path . $file->uraian_tugas)) {
+                    unlink($path . $file->uraian_tugas);
+                    $file->delete();
+                }
+            }
+
+            $filename = request()->file('uraian_tugas')->hashName();
+            request()->file('uraian_tugas')->storeAs('upload/berkas', $filename, 'public');
+
+            $attr['uraian_tugas'] = $filename;
+        }
+        if (request()->file('lainnya') && request()->file('lainnya')->isValid()) {
+            foreach ($promotion->files as $file) {
+                if ($file->lainnya != null && file_exists($path . $file->lainnya)) {
+                    unlink($path . $file->lainnya);
+                    $file->delete();
+                }
+            }
+
+            $filename = request()->file('lainnya')->hashName();
+            request()->file('lainnya')->storeAs('upload/berkas', $filename, 'public');
+
+            $attr['lainnya'] = $filename;
+        }
 
         $promotion = Promotion::find($promotion->id);
         $promotion->status = 4;
@@ -645,6 +684,18 @@ class PromotionController extends Controller
                     }
                     if ($file->sk_belajar != null && file_exists($path . $file->sk_belajar)) {
                         unlink($path . $file->sk_belajar);
+                        $file->delete();
+                    }
+                    if ($file->sk_lulus_ujian != null && file_exists($path . $file->sk_lulus_ujian)) {
+                        unlink($path . $file->sk_lulus_ujian);
+                        $file->delete();
+                    }
+                    if ($file->uraian_tugas != null && file_exists($path . $file->uraian_tugas)) {
+                        unlink($path . $file->uraian_tugas);
+                        $file->delete();
+                    }
+                    if ($file->lainnya != null && file_exists($path . $file->lainnya)) {
+                        unlink($path . $file->lainnya);
                         $file->delete();
                     }
                 }
@@ -972,6 +1023,27 @@ class PromotionController extends Controller
             request()->file('sk_belajar')->storeAs('upload/berkas', $filename, 'public');
 
             $attr['sk_belajar'] = $filename;
+        }
+        if (request()->file('sk_lulus_ujian') && request()->file('sk_lulus_ujian')->isValid()) {
+
+            $filename = request()->file('sk_lulus_ujian')->hashName();
+            request()->file('sk_lulus_ujian')->storeAs('upload/berkas', $filename, 'public');
+
+            $attr['sk_lulus_ujian'] = $filename;
+        }
+        if (request()->file('uraian_tugas') && request()->file('uraian_tugas')->isValid()) {
+
+            $filename = request()->file('uraian_tugas')->hashName();
+            request()->file('uraian_tugas')->storeAs('upload/berkas', $filename, 'public');
+
+            $attr['uraian_tugas'] = $filename;
+        }
+        if (request()->file('lainnya') && request()->file('lainnya')->isValid()) {
+
+            $filename = request()->file('lainnya')->hashName();
+            request()->file('lainnya')->storeAs('upload/berkas', $filename, 'public');
+
+            $attr['lainnya'] = $filename;
         }
 
         $data = [

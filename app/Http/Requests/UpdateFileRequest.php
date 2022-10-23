@@ -48,7 +48,10 @@ class UpdateFileRequest extends FormRequest
             'surat_tugas' => 'nullable|mimes:pdf|max:2048',
             'sk_pelantikan' => 'nullable|mimes:pdf|max:2048',
             'sk_jabatan' => 'nullable|mimes:pdf|max:2048',
-            'sk_belajar' => 'nullable|mimes:pdf|max:2048'
+            'sk_belajar' => 'nullable|mimes:pdf|max:2048',
+            'sk_lulus_ujian' => 'nullable|mimes:pdf|max:2048',
+            'uraian_tugas' => 'nullable|mimes:pdf|max:2048',
+            'lainnya' => 'nullable|mimes:pdf|max:2048',
         ];
     }
 }
