@@ -21,7 +21,6 @@ return new class extends Migration
             $table->tinyInteger('promotion_type');
             $table->tinyInteger('job_type');
             $table->tinyInteger('status');
-            $table->date('proposal_date');
             $table->timestamps();
         });
     }
