@@ -535,7 +535,7 @@ class PromotionController extends Controller
         $path = storage_path('app/public/upload/berkas/');
 
 
-        if ($adminInfo->k_dinas != $promotion->employee->k_dinas) {
+        if ($adminInfo->k_dinas != $promotion->employee->k_dinas && auth()->user()->roles->first()->id == 3) {
             return redirect()
                 ->back()
                 ->with('toast_error', __('Maaf anda tidak dapat mengakses data asn tersebut.'));
