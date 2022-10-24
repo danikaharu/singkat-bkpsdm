@@ -23,7 +23,7 @@ class Promotion extends Model
 
     public function cancel_promotion()
     {
-        return $this->hasOne(CancelPromotion::class);
+        return $this->hasOne(CancelPromotion::class)->withDefault(['reason' => '', 'additional_information' => '']);
     }
 
     public function files()

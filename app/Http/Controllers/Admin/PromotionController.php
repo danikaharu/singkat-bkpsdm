@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\PromotionExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreFileRequest, StorePromotionRequest, UpdateFileRequest, UpdatePromotionRequest};
 use App\Models\{CancelPromotion, Employee, File, Promotion};
@@ -1132,5 +1133,17 @@ class PromotionController extends Controller
         });
 
         return redirect()->route('promotion.index')->with('toast_success', 'Usulan telah ditolak');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $month = $request->month;
+        $year = $request->year;
+
+        if ($month && $year) {
+            return (new PromotionExport($month, $year))->download('usulan kenaikan pangkat ' . $month  . $year . '.xlsx');
+        } else {
+            return redirect()->back()->with('toast_error', 'Maaf, tidak bisa export data');
+        }
     }
 }

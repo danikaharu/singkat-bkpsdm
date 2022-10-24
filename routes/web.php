@@ -46,6 +46,7 @@ Route::middleware(['auth', 'web'])->prefix('admin')->group(function () {
     Route::post('/promotion/detail/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'approve'])->name('promotion.approve');
     Route::get('promotion/detail/cancel/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'detailCancel'])->name('promotion.detailCancel');
     Route::post('promotion/detail/cancel/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'cancel'])->name('promotion.cancel');
+    Route::get('promotion/export/excel', [\App\Http\Controllers\Admin\PromotionController::class, 'exportExcel'])->name('promotion.exportExcel');
 
     // Employee
     Route::get('/employee', [\App\Http\Controllers\Admin\EmployeeController::class, 'select'])->name('employee.select');

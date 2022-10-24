@@ -28,6 +28,61 @@
                         <div class="col-12 col-xl-12">
                             <div class="card">
                                 <div class="card-header">
+                                    <h4>Cetak Laporan</h4>
+                                </div>
+                                <div class="card-body">
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+                                    <form action="{{ route('promotion.exportExcel') }}">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="">Periode</label>
+                                                    <select style="cursor:pointer;" class="form-select" name="month">
+                                                        <option disabled selected>-- Pilih Periode --</option>
+                                                        @php
+                                                            for ($m = 1; $m <= 12; ++$m) {
+                                                                $month_label = date('F', mktime(0, 0, 0, $m, 1));
+                                                                echo '<option value=' . $month_label . '>' . $month_label . '</option>';
+                                                            }
+                                                        @endphp
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="">Tahun</label>
+                                                    <select style="cursor:pointer;" class="form-select" id="tag_select"
+                                                        name="year">
+                                                        <option disabled selected>-- Pilih Tahun --</option>
+                                                        @php
+                                                            $year = date('Y');
+                                                            $min = $year - 5;
+                                                            $max = $year;
+                                                            for ($i = $max; $i >= $min; $i--) {
+                                                                echo '<option value=' . $i . '>' . $i . '</option>';
+                                                            }
+                                                        @endphp
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-primary" type="submit">Cetak</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
                                     <h4>Usulan Terbaru</h4>
                                 </div>
                                 <div class="card-body">
