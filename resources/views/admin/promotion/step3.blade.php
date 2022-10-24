@@ -252,11 +252,12 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    @if ($promotion->promotion_type == 4)
+                                                    @if ($promotion->job_type == 3)
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label
-                                                                    for="sk_fungsional">{{ __('SK Jabatan Fungsional (Inpassing)') }}</label>
+                                                                    for="sk_fungsional">{{ __('SK Jabatan Fungsional (Inpassing)') }}
+                                                                    <span class="text-danger"> &#42;</span></label>
                                                                 <input type="file" name="sk_fungsional"
                                                                     id="sk_fungsional"
                                                                     class="form-control @error('sk_fungsional') is-invalid @enderror">
@@ -324,6 +325,7 @@
                                                             </div>
                                                         </div>
                                                     @endif
+
 
                                                     @if ($promotion->promotion_type == 3)
                                                         <div class="col-lg-6">
@@ -429,6 +431,8 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
+                                                    @endif
+                                                    @if ($promotion->promotion_type == 2 && $promotion->job_type == 1)
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label
@@ -459,6 +463,8 @@
                                                             </div>
                                                         </div>
                                                     @endif
+
+
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label for="lainnya">{{ __('Dokumen Lainnya') }}
