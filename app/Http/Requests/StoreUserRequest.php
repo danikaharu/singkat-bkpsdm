@@ -41,4 +41,19 @@ class StoreUserRequest extends FormRequest
             ]
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'username.required' => 'Username tidak boleh kosong',
+            'username.unique' => 'Username sudah digunakan silahkan pilih yang lain',
+            'email.required' => 'Email Wajib Diisi',
+            'email.email' => 'Diisi dengan alamat email yang valid',
+            'email.unique' => 'Email sudah digunakan silahkan pilih yang lain',
+            'role.exists' => 'Role tidak ada dalam daftar',
+            'password.required' => 'Password Wajib Diisi',
+            'password.confirmed' => 'Password tidak cocok',
+            'password.min' => 'Password minimal 8 karakter',
+        ];
+    }
 }
