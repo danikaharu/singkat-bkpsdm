@@ -9,7 +9,7 @@ class Promotion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['employee_id', 'verificator_id', 'agency_id', 'procedure_type', 'promotion_type', 'job_type', 'status'];
+    protected $fillable = ['employee_id', 'verificator_id', 'admin_id' , 'agency_id', 'procedure_type', 'promotion_type', 'job_type', 'status'];
 
     public function employee()
     {
@@ -18,7 +18,12 @@ class Promotion extends Model
 
     public function verificator()
     {
-        return $this->belongsTo(User::class, 'verificator_id', 'id');
+        return $this->belongsTo(User::class, 'verificator_id', 'id')->withDefault();
+    }
+  
+  	public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id', 'id')->withDefault();
     }
 
     public function cancel_promotion()
@@ -54,8 +59,12 @@ class Promotion extends Model
             return 'Approval Surat Usulan';
         } elseif ($this->status == 4) {
             return 'Perbaikan Dokumen';
-        } else {
+        } elseif ($this->status == 5) {
             return 'Usulan Ditolak';
+        } elseif ($this->status == 6) {
+          	return 'Usulan Diremajakan';
+        } else {
+          	return 'Menunggu Peremajaan';
         }
     }
 }
