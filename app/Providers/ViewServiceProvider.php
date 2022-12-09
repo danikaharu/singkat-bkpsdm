@@ -41,5 +41,14 @@ class ViewServiceProvider extends ServiceProvider
                 \App\Models\User::role('Verifikator')->get()
             );
         });
+      
+      	View::composer([
+            'admin.promotion.include.action',
+        ], function ($view) {
+            return $view->with(
+                'admins',
+                \App\Models\User::role('Admin INKA')->get()
+            );
+        });
     }
 }
