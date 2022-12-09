@@ -188,6 +188,8 @@ return [
                 'choose verificator',
                 'show promotions',
                 'approved promotions',
+                'choose admins',
+                'refine datas',
             ]
         ],
         [
