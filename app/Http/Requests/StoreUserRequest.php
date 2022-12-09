@@ -25,6 +25,7 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
+          	'unit_id' => 'exists:\App\Models\Unit,id',
             'name' => ['required', 'min:3', 'max:255'],
             'username' => ['required', 'min:3', 'max:255', 'unique:users,username'],
             'email' => ['required', 'email', 'unique:users,email'],

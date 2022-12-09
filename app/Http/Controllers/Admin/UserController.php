@@ -31,10 +31,13 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $users = User::with('roles:id,name');
+            $users = User::with('roles','unit');
 
             return Datatables::of($users)
                 ->addIndexColumn()
+              	->addColumn('nama_unor', function ($row) {
+                	return $row->unit ? $row->unit->n_unor : '-';
+            	})
                 ->addColumn('action', 'admin.users.include.action')
                 ->addColumn('role', function ($row) {
                     return $row->getRoleNames()->toArray() !== [] ? $row->getRoleNames()[0] : '-';
@@ -68,6 +71,7 @@ class UserController extends Controller
         $attr = $request->validated();
         $employee = Employee::where('nip_baru', $attr['username'])->first();
 
+      	$attr['unit_id'] = $employee->k_unor;
         $attr['name'] = $employee->nama;
         $attr['password'] = Hash::make($request->password);
 
@@ -120,6 +124,7 @@ class UserController extends Controller
         $attr = $request->validated();
         $employee = Employee::where('nip_baru', $attr['username'])->first();
 
+      	$attr['unit_id'] = $employee->k_unor;
         $attr['name'] = $employee->nama;
 
         if (is_null($attr['password'])) {
