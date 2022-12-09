@@ -38,11 +38,18 @@
                                         role="tab" aria-controls="document" aria-selected="true">Dokumen
                                         Pendukung</a>
                                 </li>
-                                @if ($promotion->cancel_promotion)
+                                @if ($promotion->status == 5)
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" id="cancel-tab" data-bs-toggle="tab" href="#cancel"
                                             role="tab" aria-controls="cancel" aria-selected="true"
                                             style="margin-left: 10px;">Alasan Pembatalan</a>
+                                    </li>
+                                @endif
+                               	@if ($promotion->status == 7)
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" id="cancel-tab" data-bs-toggle="tab" href="#cancel"
+                                            role="tab" aria-controls="cancel" aria-selected="true"
+                                            style="margin-left: 10px;">Peremajaan Data</a>
                                     </li>
                                 @endif
                             </ul>
@@ -598,7 +605,7 @@
                                         @endforeach
                                     </div>
                                 </div>
-                                @if ($promotion->cancel_promotion)
+                              	@if ($promotion->status == 5)
                                     <div class="tab-pane fade" id="cancel" role="tabpanel"
                                         aria-labelledby="cancel-tab">
                                         <table class="mt-3">
@@ -628,6 +635,22 @@
                                         </table>
 
 
+                                    </div>
+                                @endif
+                                @if ($promotion->status == 7)
+                                    <div class="tab-pane fade" id="cancel" role="tabpanel"
+                                        aria-labelledby="cancel-tab">
+                                        <table class="mt-3">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Admin INKA</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{ $promotion->admin->name }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 @endif
                             </div>
