@@ -57,6 +57,7 @@
                                             <th>{{ __('Nama') }}</th>
                                             <th>{{ __('Username') }}</th>
                                             <th>{{ __('Role') }}</th>
+                                           	<th>{{ __('Instansi') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -99,7 +100,13 @@
                 },
                 {
                     data: 'role',
-                    name: 'role'
+                    name: 'role',
+        			searchable: false,
+                },
+                {
+                    data: 'nama_unor',
+                    name: 'unit.n_unor',
+                  	searchable: false,
                 },
                 {
                     data: 'action',
