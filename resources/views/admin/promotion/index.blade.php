@@ -79,6 +79,8 @@
                                             <option value="3">Approval Surat Usulan</option>
                                             <option value="4">Perbaikan Dokumen</option>
                                             <option value="5">Usulan Ditolak</option>
+                                          	<option value="6">Usulan Diremajakan</option>
+                                          	<option value="7">Menunggu Peremajaan</option>
                                         </select>
                                     </div>
                                 </div>
