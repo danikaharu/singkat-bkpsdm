@@ -19,6 +19,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+      	'unit_id',
         'name',
         'username',
         'email',
@@ -43,4 +44,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+  
+  	 public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unit_id', 'k_unor');
+    }
 }
