@@ -112,6 +112,13 @@
                     </li>
                 @endcan
 
+                <li class="sidebar-item{{ request()->is('admin/profile') ? ' active' : '' }}">
+                    <a class="sidebar-link" href="{{ route('profile') }}">
+                        <i class="bi bi-person-circle"></i>
+                        <span> {{ __('Profil') }}</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('logout') }}"
                         onclick="event.preventDefault();document.getElementById('logout-form').submit();">
