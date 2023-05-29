@@ -11,6 +11,10 @@ class Employee extends Model
 
     protected $table = 'tcpns';
 
+    protected $primaryKey = 'nip';
+
+    public $timestamps = false;
+
     public function agency()
     {
         return $this->belongsTo(Agency::class, 'k_dinas', 'k_dinas');
