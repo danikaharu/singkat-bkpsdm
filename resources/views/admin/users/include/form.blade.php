@@ -49,6 +49,26 @@
 
     <div class="col-md-6">
         <div class="form-group">
+            <label for="unit">{{ __('Unit Kerja') }}</label>
+            <select id="selectUnit" class="form-select" name="unit_id">
+                <option disabled selected>-- Pilih Instansi --</option>
+                @foreach ($units as $unit)
+                    <option value="{{ $unit->k_unor }}"
+                        {{ isset($user) && $user->unit_id == $unit->k_unor ? 'selected' : (old('n_unor') == $unit->n_unor ? 'selected' : '') }}>
+                        {{ $unit->n_unor }}</option>
+                @endforeach
+            </select>
+            @error('unit')
+                <div class="invalid-feedback">
+                    <i class="bx bx-radio-circle"></i>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
             <label for="password">{{ __('Password') }}</label>
             <input type="password" name="password" id="password"
                 class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Password') }}"
@@ -90,25 +110,23 @@
     @endempty
 
     @isset($user)
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="role">{{ __('Role') }}</label>
-                    <select class="form-select" name="role" id="role">
-                        <option selected disabled>{{ __('-- Pilih role --') }}</option>
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->id }}"
-                                {{ $user->getRoleNames()->toArray() !== [] && $user->getRoleNames()[0] == $role->name ? 'selected' : '-' }}>
-                                {{ $role->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('role')
-                        <div class="invalid-feedback">
-                            <i class="bx bx-radio-circle"></i>
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="role">{{ __('Role') }}</label>
+                <select class="form-select" name="role" id="role">
+                    <option selected disabled>{{ __('-- Pilih role --') }}</option>
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->id }}"
+                            {{ $user->getRoleNames()->toArray() !== [] && $user->getRoleNames()[0] == $role->name ? 'selected' : '-' }}>
+                            {{ $role->name }}</option>
+                    @endforeach
+                </select>
+                @error('role')
+                    <div class="invalid-feedback">
+                        <i class="bx bx-radio-circle"></i>
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
         </div>
     @endisset

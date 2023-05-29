@@ -88,6 +88,28 @@
                 }
             })
 
+            $('#selectUnit').select2({
+                allowClear: true,
+                placeholder: 'Pilih Instansi',
+                ajax: {
+                    url: "{{ route('unit.select') }}",
+                    delay: 250,
+                    processResults: function({
+                        data
+                    }) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    id: item.k_unor,
+                                    text: item.n_unor,
+                                }
+                            })
+                        }
+
+                    }
+                }
+            })
+
             $('#selectEmployee').change(function() {
                 let name = $('#selectEmployee').val();
                 $('#username').val(name);
