@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Models\Employee;
-use App\Models\User;
+use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
+use App\Models\{Employee, User, Unit};
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
-use Alert;
 
 class UserController extends Controller
 {
@@ -31,13 +29,13 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $users = User::with('roles','unit');
+            $users = User::with('roles', 'unit');
 
             return Datatables::of($users)
                 ->addIndexColumn()
-              	->addColumn('nama_unor', function ($row) {
-                	return $row->unit ? $row->unit->n_unor : '-';
-            	})
+                ->addColumn('nama_unor', function ($row) {
+                    return $row->unit ? $row->unit->n_unor : '-';
+                })
                 ->addColumn('action', 'admin.users.include.action')
                 ->addColumn('role', function ($row) {
                     return $row->getRoleNames()->toArray() !== [] ? $row->getRoleNames()[0] : '-';
@@ -57,7 +55,8 @@ class UserController extends Controller
     {
         $roles = Role::get();
         $employees = Employee::get();
-        return view('admin.users.create', compact('roles', 'employees'));
+        $units = Unit::get();
+        return view('admin.users.create', compact('roles', 'employees', 'units'));
     }
 
     /**
@@ -71,7 +70,7 @@ class UserController extends Controller
         $attr = $request->validated();
         $employee = Employee::where('nip_baru', $attr['username'])->first();
 
-      	$attr['unit_id'] = $employee->k_unor;
+        $attr['unit_id'] = $employee->k_unor;
         $attr['name'] = $employee->nama;
         $attr['password'] = Hash::make($request->password);
 
@@ -107,9 +106,10 @@ class UserController extends Controller
     {
         $roles = Role::get();
         $employees = Employee::get();
+        $units = Unit::get();
         $user->load('roles:id,name');
 
-        return view('admin.users.edit', compact('user', 'roles', 'employees'));
+        return view('admin.users.edit', compact('user', 'roles', 'employees', 'units'));
     }
 
     /**
@@ -121,25 +121,43 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        $attr = $request->validated();
-        $employee = Employee::where('nip_baru', $attr['username'])->first();
+        try {
+            DB::beginTransaction();
 
-      	$attr['unit_id'] = $employee->k_unor;
-        $attr['name'] = $employee->nama;
+            $attr = $request->validated();
 
-        if (is_null($attr['password'])) {
-            unset($attr['password']);
-        } else {
-            $attr['password'] = bcrypt($attr['password']);
+            $employee = Employee::where('nip_baru', $attr['username'])->first();
+            $agency = Unit::where('k_unor', $attr['unit_id'])->first();
+
+            if ($employee) {
+                $employee->k_dinas = $agency->k_dinas;
+                $employee->k_unor = $agency->k_unor;
+                $employee->save();
+            }
+
+            $attr['name'] = $employee->nama;
+
+            if (is_null($attr['password'])) {
+                unset($attr['password']);
+            } else {
+                $attr['password'] = bcrypt($attr['password']);
+            }
+
+            $user->update($attr);
+
+            $user->syncRoles($request->role);
+
+            DB::commit();
+            return redirect()
+                ->route('users.index')
+                ->with('success', __('Data berhasil diedit.'));
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return redirect()
+                ->route('users.index')
+                ->with('success', __($th->getMessage()));
         }
-
-        $user->update($attr);
-
-        $user->syncRoles($request->role);
-
-        return redirect()
-            ->route('users.index')
-            ->with('success', __('Data berhasil diedit.'));
     }
 
     /**
