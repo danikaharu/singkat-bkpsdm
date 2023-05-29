@@ -53,6 +53,9 @@ Route::middleware(['auth', 'web'])->prefix('admin')->group(function () {
     // Employee
     Route::get('/employee', [\App\Http\Controllers\Admin\EmployeeController::class, 'select'])->name('employee.select');
 
+    // Unit
+    Route::get('/unit', [\App\Http\Controllers\Admin\UnitController::class, 'select'])->name('unit.select');
+
     // Profile 
     Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile');
 });
