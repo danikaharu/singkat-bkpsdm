@@ -80,6 +80,16 @@
                     </li>
                 @endcan
 
+                @can('view user')
+                    <li class="sidebar-title">Manajemen Pegawai</li>
+
+                    <li class="sidebar-item{{ request()->is('admin/employees', 'admin/employees/*') ? ' active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('employees.index') }}">
+                            <i class="bi bi-person-check"></i>
+                            <span> {{ __('Pegawai') }}</span>
+                        </a>
+                    </li>
+                @endcan
 
                 @can('view user')
                     <li class="sidebar-title">Manajemen User</li>
@@ -91,6 +101,7 @@
                         </a>
                     </li>
                 @endcan
+
 
                 @can('view role & permission')
                     <li class="sidebar-item{{ request()->is('admin/roles', 'admin/roles/*') ? ' active' : '' }}">

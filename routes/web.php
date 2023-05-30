@@ -51,7 +51,8 @@ Route::middleware(['auth', 'web'])->prefix('admin')->group(function () {
     Route::post('promotion/agree-data/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'agreeData'])->name('promotion.agreeData');
 
     // Employee
-    Route::get('/employee', [\App\Http\Controllers\Admin\EmployeeController::class, 'select'])->name('employee.select');
+    Route::resource('/employees', App\Http\Controllers\Admin\EmployeeController::class)->except('create', 'store', 'destroy');
+    Route::get('/select-employee', [\App\Http\Controllers\Admin\EmployeeController::class, 'select'])->name('employee.select');
 
     // Unit
     Route::get('/unit', [\App\Http\Controllers\Admin\UnitController::class, 'select'])->name('unit.select');
