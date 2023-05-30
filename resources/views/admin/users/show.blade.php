@@ -64,10 +64,6 @@
                                         <td>{{ $user->email }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bold">{{ __('Instansi') }}</td>
-                                        <td>{{ $user->unit->n_unor }}</td>
-                                    </tr>
-                                    <tr>
                                         <td class="fw-bold">{{ __('Role') }}</td>
                                         <td>{{ $user->getRoleNames()->toArray() !== [] ? $user->getRoleNames()[0] : '-' }}
                                         </td>

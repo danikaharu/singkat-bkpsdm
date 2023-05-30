@@ -55,8 +55,7 @@ class UserController extends Controller
     {
         $roles = Role::get();
         $employees = Employee::get();
-        $units = Unit::get();
-        return view('admin.users.create', compact('roles', 'employees', 'units'));
+        return view('admin.users.create', compact('roles', 'employees'));
     }
 
     /**
@@ -106,10 +105,9 @@ class UserController extends Controller
     {
         $roles = Role::get();
         $employees = Employee::get();
-        $units = Unit::get();
         $user->load('roles:id,name');
 
-        return view('admin.users.edit', compact('user', 'roles', 'employees', 'units'));
+        return view('admin.users.edit', compact('user', 'roles', 'employees'));
     }
 
     /**
@@ -127,13 +125,6 @@ class UserController extends Controller
             $attr = $request->validated();
 
             $employee = Employee::where('nip_baru', $attr['username'])->first();
-            $agency = Unit::where('k_unor', $attr['unit_id'])->first();
-
-            if ($employee) {
-                $employee->k_dinas = $agency->k_dinas;
-                $employee->k_unor = $agency->k_unor;
-                $employee->save();
-            }
 
             $attr['name'] = $employee->nama;
 
