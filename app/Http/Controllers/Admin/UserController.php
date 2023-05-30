@@ -126,6 +126,7 @@ class UserController extends Controller
 
             $employee = Employee::where('nip_baru', $attr['username'])->first();
 
+            $attr['unit_id'] = $employee->k_unor;
             $attr['name'] = $employee->nama;
 
             if (is_null($attr['password'])) {
