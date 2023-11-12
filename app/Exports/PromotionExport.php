@@ -36,8 +36,8 @@ class PromotionExport implements FromCollection, WithHeadings, WithMapping, Shou
     public function collection()
     {
         $data = Promotion::with('employee', 'cancel_promotion')
-            ->whereMonth('created_at', Carbon::parse($this->month)->month)
-            ->whereYear('created_at',   Carbon::parse($this->year)->year)
+            ->whereMonth('created_at', $this->month)
+            ->whereYear('created_at', $this->year)
             ->get();
 
         return $data;
@@ -54,8 +54,8 @@ class PromotionExport implements FromCollection, WithHeadings, WithMapping, Shou
             $promotion->employee->nip_baru,
             $promotion->employee->agency->n_dinas,
             $promotion->promotion_type(),
-          	$promotion->verificator->name,
-          	$promotion->admin->name,
+            $promotion->verificator->name,
+            $promotion->admin->name,
             $promotion->status(),
             $promotion->cancel_promotion->reason,
             $promotion->cancel_promotion->additional_information,
@@ -70,8 +70,8 @@ class PromotionExport implements FromCollection, WithHeadings, WithMapping, Shou
             'NIP',
             'INSTANSI',
             'JENIS KP',
-          	'VERIFIKATOR',
-          	'ADMIN INKA',
+            'VERIFIKATOR',
+            'ADMIN INKA',
             'STATUS USULAN',
             'ALASAN TOLAK',
             'KET',
