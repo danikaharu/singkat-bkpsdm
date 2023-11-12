@@ -6,10 +6,10 @@ use App\Exports\PromotionExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreFileRequest, StorePromotionRequest, UpdateFileRequest, UpdatePromotionRequest};
 use App\Models\{CancelPromotion, Employee, File, Promotion};
+use App\Services\FileUploadService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, DB};
-use Yajra\DataTables\Facades\DataTables;
 
 class PromotionController extends Controller
 {
@@ -66,6 +66,8 @@ class PromotionController extends Controller
             $promotions->get();
         } else if (auth()->user()->roles->first()->id == 3) {
             $promotions->where('agency_id', $adminInfo->k_dinas);
+        } else if (auth()->user()->roles->first()->id == 4) {
+            $promotions->where('admin_id', auth()->user()->id);
         } else {
             $promotions->where('verificator_id', auth()->user()->id);
         }
@@ -788,7 +790,7 @@ class PromotionController extends Controller
 
         if ($request->nip_baru || $request->nip_lama) {
             foreach ($employee as $data) {
-                if ($adminInfo->k_dinas != $data->k_dinas) {
+                if ($adminInfo->k_dinas != $data->k_dinas && auth()->user()->roles->first()->id == 3) {
                     return redirect()
                         ->back()
                         ->with('toast_error', __('Maaf anda tidak dapat mengakses data asn tersebut.'));
@@ -836,216 +838,71 @@ class PromotionController extends Controller
         return view('admin.promotion.step3', compact('promotion', 'employee'));
     }
 
-    public function storeStep3(StoreFileRequest $request)
+    public function storeStep3(StoreFileRequest $request, FileUploadService $fileUploadService)
     {
         $promotion = $request->session()->get('promotion');
 
         $attr = $request->validated();
 
-        if ($request->file('sk_cpns') && $request->file('sk_cpns')->isValid()) {
-            $filename = request()->file('sk_cpns')->hashName();
-            request()->file('sk_cpns')->storeAs('upload/berkas', $filename, 'public');
+        $sk_cpns = $fileUploadService->upload($request, 'sk_cpns', 'upload/berkas', 'public');
+        $sk_pns = $fileUploadService->upload($request, 'sk_pns', 'upload/berkas', 'public');
+        $sk_pangkat_terakhir = $fileUploadService->upload($request, 'sk_pangkat_terakhir', 'upload/berkas', 'public');
+        $kartu_pegawai = $fileUploadService->upload($request, 'kartu_pegawai', 'upload/berkas', 'public');
+        $ijazah_lama = $fileUploadService->upload($request, 'ijazah_lama', 'upload/berkas', 'public');
+        $ijazah_baru = $fileUploadService->upload($request, 'ijazah_baru', 'upload/berkas', 'public');
+        $transkrip_lama = $fileUploadService->upload($request, 'transkrip_lama', 'upload/berkas', 'public');
+        $transkrip_baru = $fileUploadService->upload($request, 'transkrip_baru', 'upload/berkas', 'public');
+        $skp_lama = $fileUploadService->upload($request, 'skp_lama', 'upload/berkas', 'public');
+        $skp_baru = $fileUploadService->upload($request, 'skp_baru', 'upload/berkas', 'public');
+        $sttpl = $fileUploadService->upload($request, 'sttpl', 'upload/berkas', 'public');
+        $sk_mutasi = $fileUploadService->upload($request, 'sk_mutasi', 'upload/berkas', 'public');
+        $sk_pengalihan = $fileUploadService->upload($request, 'sk_pengalihan', 'upload/berkas', 'public');
+        $sk_fungsional = $fileUploadService->upload($request, 'sk_fungsional', 'upload/berkas', 'public');
+        $pak_asli = $fileUploadService->upload($request, 'pak_asli', 'upload/berkas', 'public');
+        $pak_lama = $fileUploadService->upload($request, 'pak_lama', 'upload/berkas', 'public');
+        $sk_penyesuaian_fungsional = $fileUploadService->upload($request, 'sk_penyesuaian_fungsional', 'upload/berkas', 'public');
+        $sk_kenaikan_fungsional = $fileUploadService->upload($request, 'sk_kenaikan_fungsional', 'upload/berkas', 'public');
+        $sertifikat_pim = $fileUploadService->upload($request, 'sertifikat_pim', 'upload/berkas', 'public');
+        $surat_pelantikan = $fileUploadService->upload($request, 'surat_pelantikan', 'upload/berkas', 'public');
+        $surat_lowong = $fileUploadService->upload($request, 'surat_lowong', 'upload/berkas', 'public');
+        $surat_tugas = $fileUploadService->upload($request, 'surat_tugas', 'upload/berkas', 'public');
+        $sk_pelantikan = $fileUploadService->upload($request, 'sk_pelantikan', 'upload/berkas', 'public');
+        $sk_jabatan = $fileUploadService->upload($request, 'sk_jabatan', 'upload/berkas', 'public');
+        $sk_belajar = $fileUploadService->upload($request, 'sk_belajar', 'upload/berkas', 'public');
+        $sk_lulus_ujian = $fileUploadService->upload($request, 'sk_lulus_ujian', 'upload/berkas', 'public');
+        $sk_jabatan = $fileUploadService->upload($request, 'sk_jabatan', 'upload/berkas', 'public');
+        $uraian_tugas = $fileUploadService->upload($request, 'uraian_tugas', 'upload/berkas', 'public');
+        $lainnya = $fileUploadService->upload($request, 'lainnya', 'upload/berkas', 'public');
 
-            $attr['sk_cpns'] = $filename;
-        }
-        if (request()->file('sk_pns') && request()->file('sk_pns')->isValid()) {
-
-
-            $filename = request()->file('sk_pns')->hashName();
-            request()->file('sk_pns')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_pns'] = $filename;
-        }
-        if (request()->file('sk_pangkat_terakhir') && request()->file('sk_pangkat_terakhir')->isValid()) {
-
-            $filename = request()->file('sk_pangkat_terakhir')->hashName();
-            request()->file('sk_pangkat_terakhir')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_pangkat_terakhir'] = $filename;
-        }
-        if (request()->file('kartu_pegawai') && request()->file('kartu_pegawai')->isValid()) {
-
-            $filename = request()->file('kartu_pegawai')->hashName();
-            request()->file('kartu_pegawai')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['kartu_pegawai'] = $filename;
-        }
-        if (request()->file('ijazah_lama') && request()->file('ijazah_lama')->isValid()) {
-
-            $filename = request()->file('ijazah_lama')->hashName();
-            request()->file('ijazah_lama')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['ijazah_lama'] = $filename;
-        }
-        if (request()->file('ijazah_baru') && request()->file('ijazah_baru')->isValid()) {
-
-            $filename = request()->file('ijazah_baru')->hashName();
-            request()->file('ijazah_baru')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['ijazah_baru'] = $filename;
-        }
-        if (request()->file('ijazah_baru') && request()->file('ijazah_baru')->isValid()) {
-
-            $filename = request()->file('ijazah_baru')->hashName();
-            request()->file('ijazah_baru')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['ijazah_baru'] = $filename;
-        }
-        if (request()->file('transkrip_lama') && request()->file('transkrip_lama')->isValid()) {
-
-            $filename = request()->file('transkrip_lama')->hashName();
-            request()->file('transkrip_lama')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['transkrip_lama'] = $filename;
-        }
-        if (request()->file('transkrip_baru') && request()->file('transkrip_baru')->isValid()) {
-
-            $filename = request()->file('transkrip_baru')->hashName();
-            request()->file('transkrip_baru')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['transkrip_baru'] = $filename;
-        }
-        if (request()->file('skp_lama') && request()->file('skp_lama')->isValid()) {
-
-            $filename = request()->file('skp_lama')->hashName();
-            request()->file('skp_lama')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['skp_lama'] = $filename;
-        }
-        if (request()->file('skp_baru') && request()->file('skp_baru')->isValid()) {
-
-            $filename = request()->file('skp_baru')->hashName();
-            request()->file('skp_baru')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['skp_baru'] = $filename;
-        }
-        if (request()->file('sttpl') && request()->file('sttpl')->isValid()) {
-
-            $filename = request()->file('sttpl')->hashName();
-            request()->file('sttpl')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sttpl'] = $filename;
-        }
-        if (request()->file('sk_mutasi') && request()->file('sk_mutasi')->isValid()) {
-
-            $filename = request()->file('sk_mutasi')->hashName();
-            request()->file('sk_mutasi')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_mutasi'] = $filename;
-        }
-        if (request()->file('sk_pengalihan') && request()->file('sk_pengalihan')->isValid()) {
-
-            $filename = request()->file('sk_pengalihan')->hashName();
-            request()->file('sk_pengalihan')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_pengalihan'] = $filename;
-        }
-        if (request()->file('sk_fungsional') && request()->file('sk_fungsional')->isValid()) {
-
-            $filename = request()->file('sk_fungsional')->hashName();
-            request()->file('sk_fungsional')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_fungsional'] = $filename;
-        }
-        if (request()->file('pak_asli') && request()->file('pak_asli')->isValid()) {
-
-            $filename = request()->file('pak_asli')->hashName();
-            request()->file('pak_asli')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['pak_asli'] = $filename;
-        }
-        if (request()->file('pak_lama') && request()->file('pak_lama')->isValid()) {
-
-            $filename = request()->file('pak_lama')->hashName();
-            request()->file('pak_lama')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['pak_lama'] = $filename;
-        }
-
-        if (request()->file('sk_penyesuaian_fungsional') && request()->file('sk_penyesuaian_fungsional')->isValid()) {
-
-            $filename = request()->file('sk_penyesuaian_fungsional')->hashName();
-            request()->file('sk_penyesuaian_fungsional')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_penyesuaian_fungsional'] = $filename;
-        }
-        if (request()->file('sk_kenaikan_fungsional') && request()->file('sk_kenaikan_fungsional')->isValid()) {
-
-            $filename = request()->file('sk_kenaikan_fungsional')->hashName();
-            request()->file('sk_kenaikan_fungsional')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_kenaikan_fungsional'] = $filename;
-        }
-        if (request()->file('sertifikat_pim') && request()->file('sertifikat_pim')->isValid()) {
-
-            $filename = request()->file('sertifikat_pim')->hashName();
-            request()->file('sertifikat_pim')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sertifikat_pim'] = $filename;
-        }
-        if (request()->file('surat_pelantikan') && request()->file('surat_pelantikan')->isValid()) {
-
-            $filename = request()->file('surat_pelantikan')->hashName();
-            request()->file('surat_pelantikan')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['surat_pelantikan'] = $filename;
-        }
-        if (request()->file('surat_lowong') && request()->file('surat_lowong')->isValid()) {
-
-            $filename = request()->file('surat_lowong')->hashName();
-            request()->file('surat_lowong')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['surat_lowong'] = $filename;
-        }
-        if (request()->file('surat_tugas') && request()->file('surat_tugas')->isValid()) {
-
-            $filename = request()->file('surat_tugas')->hashName();
-            request()->file('surat_tugas')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['surat_tugas'] = $filename;
-        }
-        if (request()->file('sk_pelantikan') && request()->file('sk_pelantikan')->isValid()) {
-
-            $filename = request()->file('sk_pelantikan')->hashName();
-            request()->file('sk_pelantikan')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_pelantikan'] = $filename;
-        }
-        if (request()->file('sk_jabatan') && request()->file('sk_jabatan')->isValid()) {
-
-            $filename = request()->file('sk_jabatan')->hashName();
-            request()->file('sk_jabatan')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_jabatan'] = $filename;
-        }
-        if (request()->file('sk_belajar') && request()->file('sk_belajar')->isValid()) {
-
-            $filename = request()->file('sk_belajar')->hashName();
-            request()->file('sk_belajar')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_belajar'] = $filename;
-        }
-        if (request()->file('sk_lulus_ujian') && request()->file('sk_lulus_ujian')->isValid()) {
-
-            $filename = request()->file('sk_lulus_ujian')->hashName();
-            request()->file('sk_lulus_ujian')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['sk_lulus_ujian'] = $filename;
-        }
-        if (request()->file('uraian_tugas') && request()->file('uraian_tugas')->isValid()) {
-
-            $filename = request()->file('uraian_tugas')->hashName();
-            request()->file('uraian_tugas')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['uraian_tugas'] = $filename;
-        }
-        if (request()->file('lainnya') && request()->file('lainnya')->isValid()) {
-
-            $filename = request()->file('lainnya')->hashName();
-            request()->file('lainnya')->storeAs('upload/berkas', $filename, 'public');
-
-            $attr['lainnya'] = $filename;
-        }
+        $attr['sk_cpns'] = $sk_cpns;
+        $attr['sk_pns'] = $sk_pns;
+        $attr['sk_pangkat_terakhir'] = $sk_pangkat_terakhir;
+        $attr['kartu_pegawai'] = $kartu_pegawai;
+        $attr['ijazah_lama'] = $ijazah_lama;
+        $attr['ijazah_baru'] = $ijazah_baru;
+        $attr['transkrip_lama'] = $transkrip_lama;
+        $attr['transkrip_baru'] = $transkrip_baru;
+        $attr['skp_lama'] = $skp_lama;
+        $attr['skp_baru'] = $skp_baru;
+        $attr['sttpl'] = $sttpl;
+        $attr['sk_mutasi'] = $sk_mutasi;
+        $attr['sk_pengalihan'] = $sk_pengalihan;
+        $attr['sk_fungsional'] = $sk_fungsional;
+        $attr['pak_asli'] = $pak_asli;
+        $attr['pak_lama'] = $pak_lama;
+        $attr['sk_penyesuaian_fungsional'] = $sk_penyesuaian_fungsional;
+        $attr['sk_kenaikan_fungsional'] = $sk_kenaikan_fungsional;
+        $attr['sertifikat_pim'] = $sertifikat_pim;
+        $attr['surat_pelantikan'] = $surat_pelantikan;
+        $attr['surat_lowong'] = $surat_lowong;
+        $attr['surat_tugas'] = $surat_tugas;
+        $attr['sk_pelantikan'] = $sk_pelantikan;
+        $attr['sk_jabatan'] = $sk_jabatan;
+        $attr['sk_belajar'] = $sk_belajar;
+        $attr['sk_lulus_ujian'] = $sk_lulus_ujian;
+        $attr['sk_jabatan'] = $sk_jabatan;
+        $attr['uraian_tugas'] = $uraian_tugas;
+        $attr['lainnya'] = $lainnya;
 
         $data = [
             'employee_id' => $promotion->employee_id,
@@ -1092,6 +949,31 @@ class PromotionController extends Controller
             $promotion->update($attr);
 
             return redirect()->route('promotion.index')->with('toast_success', 'Verifikator berhasil ditambahkan');
+        }
+    }
+
+    public function storeAdmin(Request $request, Promotion $promotion)
+    {
+        $validatedData = $request->validate([
+            'admin_id' => 'required',
+        ]);
+
+        if ($promotion) {
+            $attr = [
+                'admin_id' => $validatedData['admin_id'],
+                'status' => 7,
+            ];
+            $promotion->update($attr);
+
+            return redirect()->route('promotion.index')->with('toast_success', 'Admin INKA berhasil ditambahkan');
+        }
+    }
+
+    public function agreeData(Request $request, Promotion $promotion)
+    {
+        if ($promotion) {
+            $promotion->update(['status' => 6]);
+            return redirect()->route('promotion.index')->with('toast_success', 'Usulan telah diremajakan');
         }
     }
 
