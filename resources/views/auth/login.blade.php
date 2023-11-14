@@ -87,7 +87,9 @@
                 <div style="color:white;">
                     <p>Kenaikan Pangkat Otomatis atau Reguler</p>
                     <ol style="list-style:none;list-style-type: number;">
-                        <li>Sasaran Kerja Pegawai (SKP) Tahun 2021 dan 2022 yang dilegalisir oleh Kasubag
+                        <li>Sasaran Kerja Pegawai (SKP) Tahun {{ \Carbon\Carbon::now()->subYear()->format('Y') }} dan
+                            {{ \Carbon\Carbon::now()->format('Y') }}
+                            yang dilegalisir oleh Kasubag
                             Kepegawaian masing-masing SKPD/Kepala Sekolah/Kepala UPTD
                         </li>
                     </ol>
@@ -97,7 +99,8 @@
                     <ol style="list-style:none;list-style-type: number;">
                         <li>Sertifikat PIM Bagi yang penah mengikuti Diklat (Legalisir BKPSDM)
                         </li>
-                        <li>Sasaran Kerja Pegawai (SKP) Tahun 2021 dan 2022 yang dilegalisir oleh Kasubag
+                        <li>Sasaran Kerja Pegawai (SKP) {{ \Carbon\Carbon::now()->subYear()->format('Y') }} dan
+                            {{ \Carbon\Carbon::now()->format('Y') }} yang dilegalisir oleh Kasubag
                             Kepegawaian masing-masing SKPD/Kepala Sekolah/Kepala UPTD
                         </li>
                         <li>SK Jabatan (Legalisir BKPSDM),</li>
