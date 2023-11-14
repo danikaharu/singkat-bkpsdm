@@ -19,7 +19,7 @@ class Employee extends Model
 
     public function getRouteKeyName()
     {
-        return 'nip';
+        return 'nip_baru';
     }
 
     public function agency()
