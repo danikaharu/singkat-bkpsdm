@@ -40,7 +40,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('employees.update', $employee->nip) }}" method="POST">
+                            <form action="{{ route('employees.update', $employee->nip_baru) }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
