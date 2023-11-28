@@ -42,13 +42,13 @@ Route::middleware(['auth', 'web'])->prefix('admin')->group(function () {
     Route::post('/promotion/verificator/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'storeVerificator'])->name('promotion.storeVerificator');
     Route::post('/promotion/admin/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'storeAdmin'])->name('promotion.storeAdmin');
     Route::get('/promotion/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'show'])->name('promotion.show');
-    Route::delete('/promotion/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'destroy'])->name('promotion.destroy');
     Route::get('/promotion/detail/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'detailApprove'])->name('promotion.detailApprove');
     Route::post('/promotion/detail/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'approve'])->name('promotion.approve');
     Route::get('promotion/detail/cancel/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'detailCancel'])->name('promotion.detailCancel');
     Route::post('promotion/detail/cancel/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'cancel'])->name('promotion.cancel');
     Route::get('promotion/export/excel', [\App\Http\Controllers\Admin\PromotionController::class, 'exportExcel'])->name('promotion.exportExcel');
     Route::post('promotion/agree-data/{promotion}', [\App\Http\Controllers\Admin\PromotionController::class, 'agreeData'])->name('promotion.agreeData');
+    Route::post('/promotion/destroy', [\App\Http\Controllers\Admin\PromotionController::class, 'destroy'])->name('promotion.destroy');
 
     // Employee
     Route::resource('/employees', App\Http\Controllers\Admin\EmployeeController::class)->except('create', 'store', 'destroy');

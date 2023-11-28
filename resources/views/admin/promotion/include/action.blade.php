@@ -11,18 +11,6 @@
         </a>
     @endcan
 
-        @can('delete promotions')
-            <form action="{{ route('promotion.destroy', $model->id) }}" method="post" class="d-inline" role="alert"
-                alert-title="Apakah anda yakin ingin menghapus data ini?" alert-text="Data yang dihapus tidak bisa kembali">
-                @csrf
-                @method('delete')
-
-                <button class="btn btn-outline-danger btn-sm mb-2">
-                    <i class="ace-icon fa fa-trash-alt"></i>
-                </button>
-            </form>
-        @endcan
-
     @if ($model->status == 1 || $model->status == 2)
         @can('choose verificator')
             <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal"
@@ -60,8 +48,8 @@
             </div>
         @endcan
     @endif
-  
-  	@if ($model->status == 3)
+
+    @if ($model->status == 3)
         @can('choose admins')
             <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal"
                 data-bs-target="#selectAdminModal{{ $model->id }}">
@@ -98,10 +86,10 @@
             </div>
         @endcan
     @endif
-  
-  	@if ($model->status == 7)
-  		@can('refine datas')
-  		<button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal"
+
+    @if ($model->status == 7)
+        @can('refine datas')
+            <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal"
                 data-bs-target="#agreeDataModal{{ $model->id }}">
                 <i class="fa-solid fa-user-check"></i>
             </button>
@@ -126,9 +114,9 @@
                     </div>
                 </div>
             </div>
-  		@endcan
-  	@endif
-  
+        @endcan
+    @endif
+
     @can('approved promotions')
         @if ($model->status == 2)
             <a href="{{ route('promotion.detailApprove', $model->id) }}" class="btn btn-outline-danger btn-sm">

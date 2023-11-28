@@ -79,8 +79,8 @@
                                             <option value="3">Approval Surat Usulan</option>
                                             <option value="4">Perbaikan Dokumen</option>
                                             <option value="5">Usulan Ditolak</option>
-                                          	<option value="6">Usulan Diremajakan</option>
-                                          	<option value="7">Menunggu Peremajaan</option>
+                                            <option value="6">Usulan Diremajakan</option>
+                                            <option value="7">Menunggu Peremajaan</option>
                                         </select>
                                     </div>
                                 </div>
@@ -92,15 +92,17 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <button type="button" id="btnDetailApprove" class="btn btn-primary my-3 d-none"
-                        onclick="detailApprove()">Selanjutnya</button>
+                    @can('delete promotions')
+                        <button type="button" id="btnBulkDelete" name="bulk_delete" class="btn btn-danger my-3 d-none"
+                            onclick="bulkDelete()">Hapus Pilihan</button>
+                    @endcan
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive p-1">
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
-                                            {{-- <th><input type="checkbox" id="head-cb"></th> --}}
+                                            <th><input type="checkbox" id="head-cb"></th>
                                             <th>{{ __('NIP') }}</th>
                                             <th>{{ __('Nama') }}</th>
                                             <th>{{ __('Jenis Kenaikan Pangkat') }}</th>
@@ -134,7 +136,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
+        @php
+            $user = auth()->user();
+        @endphp
+
         let checkOne = 0;
+        const userRole = @json($user->hasRole('Super Admin'));
 
         $('#data-table').DataTable({
             processing: true,
@@ -149,15 +156,15 @@
                     d.filter_nip = $('#filter_nip').val();
                 }
             },
-            columns: [
-                // {
-                //     searchable: false,
-                //     orderable: false,
-                //     sortable: false,
-                //     render: function(data, type, row) {
-                //         return `<input type="checkbox" class="cb-child" value="${row.id}">`;
-                //     }
-                // },
+            columns: [{
+                    visible: userRole,
+                    searchable: false,
+                    orderable: false,
+                    sortable: false,
+                    render: function(data, type, row) {
+                        return `<input type="checkbox" name="id[]" class="cb-child" value="${row.id}">`;
+                    }
+                },
                 {
                     data: 'nip',
                     name: 'employee.nip_baru'
@@ -207,68 +214,97 @@
         $("body").on('submit', `form[role='alert']`, function(event) {
             event.preventDefault();
 
-            Swal.fire({
-                title: $(this).attr('alert-title'),
-                text: $(this).attr('alert-text'),
-                icon: "warning",
-                allowOutsideClick: false,
-                showCancelButton: true,
-                cancelButtonText: "Batal",
-                confirmButtonText: "Hapus",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    event.target.submit();
-                }
-            })
+
         });
 
-        // $(document).ready(function() {
-        //     $("#head-cb").on('click', function() {
-        //         var isChecked = $("#head-cb").prop('checked')
-        //         $(".cb-child").prop('checked', isChecked)
-        //         if (isChecked == true) {
-        //             $("#btnDetailApprove").removeClass("d-none")
-        //         } else {
-        //             $("#btnDetailApprove").addClass("d-none")
-        //         }
-        //     })
+        $(document).ready(function() {
+            $("#head-cb").on('click', function() {
+                var isChecked = $("#head-cb").prop('checked')
+                $(".cb-child").prop('checked', isChecked)
+                if (isChecked == true) {
+                    $("#btnBulkDelete").removeClass("d-none")
+                } else {
+                    $("#btnBulkDelete").addClass("d-none")
+                }
+            })
 
-        //     $("#data-table tbody").on('click', '.cb-child', function() {
-        //         if ($(this).prop('checked') != true) {
-        //             $('#head-cb').prop('checked', false)
-        //         }
+            $("#data-table tbody").on('click', '.cb-child', function() {
+                if ($(this).prop('checked') != true) {
+                    $('#head-cb').prop('checked', false)
+                }
 
-        //         let allCheckbox = $("#data-table tbody .cb-child:checked")
-        //         if (allCheckbox.length > 0) {
-        //             $("#btnDetailApprove").removeClass("d-none")
-        //         } else {
-        //             $("#btnDetailApprove").addClass("d-none")
-        //         }
-        //     })
+                let allCheckbox = $("#data-table tbody .cb-child:checked")
+                if (allCheckbox.length > 0) {
+                    $("#btnBulkDelete").removeClass("d-none")
+                } else {
+                    $("#btnBulkDelete").addClass("d-none")
+                }
+            })
 
-        // })
+        })
 
-        // function detailApprove() {
-        //     let choosenCheckbox = $("#data-table tbody .cb-child:checked")
-        //     let allId = [];
+        function bulkDelete() {
+            let choosenCheckbox = $("#data-table tbody .cb-child:checked")
+            let id = [];
 
-        //     $.each(choosenCheckbox, function(index, elm) {
-        //         allId.push(elm.value);
-        //     })
+            $.each(choosenCheckbox, function() {
+                id.push($(this).val());
+            })
 
-        //     $.ajax({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         url: "/admin/promotion/detail",
-        //         type: "POST",
-        //         data: {
-        //             id: allId
-        //         },
-        //         success: function(data) {
-        //             $('#detailApprove').html(data);
-        //         }
-        //     })
-        // }
+            if (id.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Pilih setidaknya satu item untuk dihapus.'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: 'Anda tidak akan dapat mengembalikan ini!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{ route('promotion.destroy') }}",
+                        type: "POST",
+                        data: {
+                            id: id
+                        },
+                        success: function(data) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Hapus!',
+                                text: 'Data berhasil dihapus.',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                onClose: () => {
+                                    window.location.assign('promotion');
+                                }
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Terjadi kesalahan saat menghapus item.'
+                            });
+                        }
+                    })
+                }
+            })
+
+
+        }
     </script>
 @endpush

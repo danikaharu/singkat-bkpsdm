@@ -564,25 +564,23 @@ class PromotionController extends Controller
         return redirect()->back()->with('toast_success', 'Data berhasil diedit');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Promotion  $promotion
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Promotion $promotion)
+    public function destroy(Request $request)
     {
+        $promotion_id_array = $request->input('id');
+        $promotions = Promotion::whereIn('id', $promotion_id_array)
+            ->with('employee', 'files')
+            ->get();
+
         $usernameAdmin = Auth::user()->username;
         $adminInfo = Employee::where('nip_baru', $usernameAdmin)->first();
         $path = storage_path('app/public/upload/berkas/');
 
-
-        if ($adminInfo->k_dinas != $promotion->employee->k_dinas && auth()->user()->roles->first()->id == 3) {
-            return redirect()
-                ->back()
-                ->with('toast_error', __('Maaf anda tidak dapat mengakses data asn tersebut.'));
-        } else {
-            if ($promotion) {
+        foreach ($promotions as $promotion) {
+            if ($adminInfo->k_dinas != $promotion->employee->k_dinas && auth()->user()->roles->first()->id == 3) {
+                return redirect()
+                    ->back()
+                    ->with('toast_error', __('Maaf anda tidak dapat mengakses data asn tersebut.'));
+            } else {
                 foreach ($promotion->files as $file) {
                     if ($file->sk_cpns != null && file_exists($path . $file->sk_cpns)) {
                         unlink($path . $file->sk_cpns);
@@ -702,11 +700,11 @@ class PromotionController extends Controller
                         $file->delete();
                     }
                 }
+                $promotion->cancel_promotion->delete();
                 $promotion->delete();
-
-                return redirect()->route('promotion.index')->with('toast_success', 'Data berhasil dihapus');
             }
         }
+        return redirect()->route('promotion.index')->with('toast_success', 'Data berhasil dihapus');
     }
 
     public function createStep1(Request $request)
